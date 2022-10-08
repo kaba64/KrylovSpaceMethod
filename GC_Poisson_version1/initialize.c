@@ -23,9 +23,9 @@ void grid_generation(int im, int jm, double hx, double hy, double* x, double* y,
       dy[j] = dy_t;
     }else{
       y[j]  = y[j-1]+dy_t;
-      dx[j] = dy_t;
+      dy[j] = dy_t;
     }
-  }
+   }
 }
 
 void initialize_vector(int im, int jm, int id, double value, double * f){
@@ -39,7 +39,7 @@ void initialize_vector(int im, int jm, int id, double value, double * f){
 void fill_rh(int im, int jm, int id, double alpha, double beta, double* x, double* y, double* f){
   for(int j=0;j<jm;j++){
     for(int i=0;i<im;i++){
-      f[j*id+i]= (alpha*alpha+beta*beta)*(pi*pi)*sin(alpha*pi*x[i])*cos(beta*pi*y[j]);
+      f[j*id+i]= 0.0;
     }
   }
 }
@@ -47,12 +47,30 @@ void fill_rh(int im, int jm, int id, double alpha, double beta, double* x, doubl
 void writing_to_file(int im, int jm, int id, double* x, double* y, double* f){
   
   FILE *ofile;
-  //char filename[] = "rh.txt";
   char filename[] = "solution.txt";
   ofile = fopen(filename, "w");
   for(int j=0;j<jm;j++){
     for(int i=0;i<im;i++){
       fprintf(ofile, "%d\t%d\t%lf\t%lf\t%lf\n",i,j,x[i],y[j],f[j*id+i]);
+    }
+  }
+  fclose(ofile);
+}
+
+void writing_to_file_exact(int im, int jm, int id, double* x, double* y, double hx, double hy, double t){
+  
+  FILE *ofile;
+  char filename[] = "exaxt_solution.txt";
+  double sum;
+  ofile = fopen(filename, "w");
+  for(int j=0;j<jm;j++){
+    for(int i=0;i<im;i++){
+      sum=0.0;
+      for(int k=1;k<100;k++){
+	sum+=((1-((int)pow(-1,k)))*sinh((k*pi*(hy-y[j]))/hx)*sin((k*pi*x[i])/hx))/(k*sinh((k*pi*(hy))/hx));
+      }
+      sum = ((2*t)/pi)*sum;
+      fprintf(ofile, "%d\t%d\t%lf\t%lf\t%lf\n",i,j,x[i],y[j],sum);
     }
   }
   fclose(ofile);

@@ -29,6 +29,7 @@ void MaxValue(int n, double* x, double* maxval){
     }
   }
 }
+
 /* 
 y = sign1*alpha1*x+sign2*alpha2*y 
 */

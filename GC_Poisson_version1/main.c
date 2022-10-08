@@ -6,9 +6,9 @@
 #include "initialize.h"
 #include "MVOperation.h"
 
-const int im=200;
+const int im=100;
 const int jm=200;
-const double hx = 2.;
+const double hx = 1.;
 const double hy = 2.;
 const double alpha = 1.0;
 const double beta = 1.0;
@@ -19,17 +19,17 @@ int main(int argc, char *argv[])
   int *ia, *ja;
   double *a, *rh, *q1, *q2;
   double *x, *y, *dx, *dy;
-  double *pn, *pnm, *rn, *rnm;
-  double *x_sn, *x_snm;
+  double *pn, *rn;
+  double *x_sn;
   double alphan, gaman;
-  double maxresidual, temp_dot_1, temp_dot_2;
+  double maxresidual, residual, residual0, temp_dot_1, temp_dot_2;
   int iteration;
   int id, nnz, nrows;
-  double elements[5];
+  double elements[5], boundary_values[4];
   
   id = im;
   nnz = 2*(4*(im-2)+4*(jm-2)+6)+5*(im-2)*(jm-2);
-  nrows = jm*jm;
+  nrows = im*jm;
   
   ia     = (int*)malloc((nrows+1)*sizeof(int));
   ja     = (int*)malloc(nnz*sizeof(int));
@@ -52,17 +52,21 @@ int main(int argc, char *argv[])
   elements[2] = 2.0/(dx[0]*dx[0])+2.0/(dy[0]*dy[0]);
   elements[3] = -1.0/(dx[0]*dx[0]);
   elements[4] = -1.0/(dy[0]*dy[0]);
-  sparce_matrix(im,jm,id,elements,'D',ia,ja,a);
+  boundary_values[0]= 100.0;
+  boundary_values[1]= 0.0;
+  boundary_values[2]= 0.0;
+  boundary_values[3]= 0.0;
   fill_rh(im,jm,id,alpha,beta,x,y,rh);
-  //writing_to_file(im,jm,id,x,y,rh);
-  
+  sparce_matrix(im,jm,id,elements,boundary_values,'D',ia,ja,a,rh);
   /*Start CGM*/
   iteration = 0;
   initialize_vector(im,jm,id,0.0,x_sn);
   Copy(nrows,rh,rn);
-  MaxValue(nrows,rn,&maxresidual);
-  writing_residual('C',maxresidual,iteration);
-  while(maxresidual>eps){
+  DotProduct(nrows,rn,rn,&residual);
+  residual = sqrt(residual);
+  residual0 = residual;
+  writing_residual('C',residual/residual0,iteration);
+  while(residual>eps){
     if(iteration==0){
       Copy(nrows,rn,pn);
     }else{
@@ -79,11 +83,13 @@ int main(int argc, char *argv[])
     alphan = temp_dot_1/temp_dot_2;
     Axpy(nrows,alphan,1.0,1,1,pn,x_sn);
     Axpy(nrows,alphan,1.0,-1,1,q2,rn);
-    MaxValue(nrows,rn,&maxresidual);
+    DotProduct(nrows,rn,rn,&residual);
+    residual = sqrt(residual);
     iteration++;
-    writing_residual('C',maxresidual,iteration);
+    writing_residual('C',residual/residual0,iteration);
   }
   writing_to_file(im,jm,id,x,y,x_sn);
+  writing_to_file_exact(im,jm,id,x,y,hx,hy,boundary_values[0]);
   free(a); free(ia); free(ja); free(rh);
   free(x); free(y),free(dx); free(dy);
   free(x_sn); free(q1);free(q2);

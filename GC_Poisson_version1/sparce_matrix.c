@@ -1,11 +1,21 @@
-void sparce_matrix(int im, int jm, int id, double* elements , char boundary, int* ia, int* ja, double* a){
+void sparce_matrix(int im, int jm, int id, double* elements, double* values , char boundary, int* ia, int* ja, double* a, double* rh){
   int row, num, sign;
   int i1, i2, i3, i4, i5;
   double a1, a2, a3, a4, a5;
+  double value_b, value_l, value_r, value_t;
+  
   if(boundary=='D'){
     sign = -1;
+    value_b = values[0];
+    value_l = values[1];
+    value_r = values[2];
+    value_t = values[3];
   }else if(boundary=='N'){
     sign = 1;
+    value_b = 0.0;
+    value_l = 0.0;
+    value_r = 0.0;
+    value_t = 0.0;
   }
   a1 = elements[0];
   a2 = elements[1];
@@ -32,6 +42,7 @@ void sparce_matrix(int im, int jm, int id, double* elements , char boundary, int
 	  ja[num]= i5;
 	  a[num] = a5;
 	  num++;
+	  rh[j*id+i] -= 2*(a1*value_b+a2*value_l); 
   	}else if(i>0 && i<im-1){
   	  ja[num]= i2;
 	  a[num] = a2;
@@ -45,16 +56,18 @@ void sparce_matrix(int im, int jm, int id, double* elements , char boundary, int
 	  ja[num]= i5;
 	  a[num] = a5;
   	  num++;
+	  rh[j*id+i] -= 2*(a1*value_b);
   	}else{
 	  ja[num]= i2;
 	  a[num] = a2;
 	  num++;
 	  ja[num]= i3;
-	  a[num] = sign*(a1+a3)+a4;
+	  a[num] = sign*(a1+a4)+a3;
 	  num++;
 	  ja[num]= i5;
 	  a[num] = a5;
 	  num++;
+	  rh[j*id+i] -= 2*(a1*value_b+a4*value_r);
   	}
 	row++;
       }
@@ -79,6 +92,7 @@ void sparce_matrix(int im, int jm, int id, double* elements , char boundary, int
 	  ja[num]= i5;
 	  a[num] = a5;
 	  num++;
+	  rh[j*id+i] -= 2*(a2*value_l);
 	}else if(i>0 && i<im-1){
 	  ja[num]= i1;
 	  a[num] = a1;
@@ -108,6 +122,7 @@ void sparce_matrix(int im, int jm, int id, double* elements , char boundary, int
 	  ja[num]= i5;
 	  a[num] = a5;
 	  num++;
+	  rh[j*id+i] -= 2*(a4*value_r);
 	}
 	row++;
       }
@@ -129,6 +144,7 @@ void sparce_matrix(int im, int jm, int id, double* elements , char boundary, int
           ja[num]= i4;
 	  a[num] = a4;
   	  num++;
+	  rh[j*id+i] -= 2*(a2*value_l+a5*value_t);
   	}else if(i>0 && i<im-1){
 	  ja[num]= i1;
 	  a[num] = a1;
@@ -142,6 +158,7 @@ void sparce_matrix(int im, int jm, int id, double* elements , char boundary, int
           ja[num]= i4;
           a[num] = a4;
           num++;
+	  rh[j*id+i] -= 2*(a5*value_t);
   	}else{
           ja[num]= i1;
           a[num] = a1;
@@ -152,6 +169,7 @@ void sparce_matrix(int im, int jm, int id, double* elements , char boundary, int
           ja[num]= i3;
           a[num] = a3+(a4+a5)*sign;
           num++;
+	  rh[j*id+i] -= 2*(a4*value_r+a5*value_t);
   	}
   	row++;
       }

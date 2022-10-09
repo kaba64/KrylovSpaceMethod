@@ -1,0 +1,2 @@
+Time spent for computing x CCGM 1.087316 in second
+Time spent for computing x GSM 46.707137 in second

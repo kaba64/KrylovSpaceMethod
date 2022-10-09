@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include <sys/time.h>
 
 const double pi = acos(-1.);
 
@@ -44,11 +45,13 @@ void fill_rh(int im, int jm, int id, double alpha, double beta, double* x, doubl
   }
 }
 
-void writing_to_file(int im, int jm, int id, double* x, double* y, double* f){
+void writing_to_file(int im, int jm, int id, char name, double* x, double* y, double* f){
   
   FILE *ofile;
   char filename[] = "solution.txt";
-  ofile = fopen(filename, "w");
+  char name1[3] = {name ,'_','\0'};
+  
+  ofile = fopen(strcat(name1,filename), "w");
   for(int j=0;j<jm;j++){
     for(int i=0;i<im;i++){
       fprintf(ofile, "%d\t%d\t%lf\t%lf\t%lf\n",i,j,x[i],y[j],f[j*id+i]);
@@ -84,4 +87,14 @@ void writing_residual(char name, double res, int num){
   ofile = fopen(strcat(name1,filename), "a");
   fprintf(ofile, "%d\t%.15f\n",num,res);
   fclose(ofile);
+}
+
+double spendtimeinsecond()
+{
+  struct timeval tp;
+  struct timezone tzp;
+  int i;
+
+  i = gettimeofday(&tp,&tzp);
+  return ( (double) tp.tv_sec + (double) tp.tv_usec * 1.e-6 );
 }

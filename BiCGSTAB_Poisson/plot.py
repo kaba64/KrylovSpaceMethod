@@ -25,7 +25,7 @@ for q in arange(0,m*n,1):
         j = int(C_data[q,1])
         field[i,j] = C_data[q,4]
         G_field[i,j] = G_data[q,4]
-        B_field[i,j] = G_data[q,4]
+        B_field[i,j] = B_data[q,4]
         x = C_data[q,2]
         y = C_data[q,3]
         X[i, j] = x

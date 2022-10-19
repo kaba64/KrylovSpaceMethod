@@ -61,8 +61,8 @@ void Axpy4(int n, double alpha1, double alpha2, double alpha3, int sign1, int si
 
 void Scale_V(int nrows, double value, char inverse, double* x, double* y){
   double scale;
-  if(inverse=='Y'){
-    value = 1.0/value;
-  }
+  //if(inverse=='Y'){
+  value = 1.0/value;
+    //}
   for(int i=0;i<nrows;i++){y[i]=value*x[i];}
 }

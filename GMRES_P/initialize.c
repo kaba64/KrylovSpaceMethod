@@ -37,6 +37,15 @@ void initialize_vector(int im, int jm, int id, double value, double * f){
   }
 }
 
+void initialize_h(int m, int n, double value, double f[m][n]){
+  
+  for(int j=0;j<n;j++){
+    for(int i=0;i<m;i++){
+      f[i][j]=value;
+    }
+  }
+}
+
 void fill_rh(int im, int jm, int id, double alpha, double beta, double* x, double* y, double* f){
   for(int j=0;j<jm;j++){
     for(int i=0;i<im;i++){

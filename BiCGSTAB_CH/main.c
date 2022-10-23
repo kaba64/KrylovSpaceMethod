@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
   double *x_sn, *x_snp;
   double alphan, gaman, betan, product_co;
   double maxresidual, residual, residual0, temp_dot_1, temp_dot_2, temp_dot_3;
-  int iteration, k;
+  int iteration, k, n_w;
   int id, nnz, nrows;
   char name;
   double t1,t2;
@@ -72,7 +72,8 @@ int main(int argc, char *argv[])
   q2     = (double*)malloc(nrows*sizeof(double));
   sn     = (double*)malloc(nrows*sizeof(double));
   k=0;
-  while((k*dt)<0.25){
+  n_w = 0;
+  while((k*dt)<200.5){
     printf("Outer loop : %d\n",k);
     iteration = 0;
     Copy(nrows,x_snp,x_sn);
@@ -110,6 +111,31 @@ int main(int argc, char *argv[])
       residual = sqrt(residual);
       iteration++;
       writing_residual('B',residual/residual0,iteration);
+    }
+    if((k*dt)>=0.25 && and n_w ==0){
+      writing_to_file(im,jm,id,'a',x,y,x_snp);
+      n_w++;
+    }else if((k*dt)>=2.0 && and n_w ==1){
+      writing_to_file(im,jm,id,'b',x,y,x_snp);
+      n_w++;
+    }else if((k*dt)>=8.0 && and n_w ==2){
+      writing_to_file(im,jm,id,'c',x,y,x_snp);
+      n_w++;
+    }else if((k*dt)>=20.0 && and n_w ==3){
+      writing_to_file(im,jm,id,'d',x,y,x_snp);
+      n_w++;
+    }else if((k*dt)>=40.0 && and n_w ==4){
+      writing_to_file(im,jm,id,'e',x,y,x_snp);
+      n_w++;
+    }else if((k*dt)>=70.0 && and n_w ==5){
+      writing_to_file(im,jm,id,'f',x,y,x_snp);
+      n_w++;
+    }else if((k*dt)>=100.0 && and n_w ==6){
+      writing_to_file(im,jm,id,'g',x,y,x_snp);
+      n_w++;
+    }else if((k*dt)>=200.0 && and n_w ==7){
+      writing_to_file(im,jm,id,'h',x,y,x_snp);
+      n_w++;
     }
     k++;
   }

@@ -69,12 +69,6 @@ void initialize_vector(int im, int jm, int id, double value, double * f){
   }
 }
 
-void initialize_VC(int n, double value, double * f){
-  for(int i=0;i<n;i++){
-    f[i]=value;
-  }
-}
-
 void initialize_phi(int im, int jm, int id, double hx, double hy, double* x, double* y, double radius, double eps_ch,double * f){
   double cx0, cx1, cx2, cy1, cy2;
   double distance;

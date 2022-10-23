@@ -112,28 +112,28 @@ int main(int argc, char *argv[])
       iteration++;
       writing_residual('B',residual/residual0,iteration);
     }
-    if((k*dt)>=0.25 && and n_w ==0){
+    if((k*dt)>=0.25 && n_w ==0){
       writing_to_file(im,jm,id,'a',x,y,x_snp);
       n_w++;
-    }else if((k*dt)>=2.0 && and n_w ==1){
+    }else if((k*dt)>=2.0 && n_w ==1){
       writing_to_file(im,jm,id,'b',x,y,x_snp);
       n_w++;
-    }else if((k*dt)>=8.0 && and n_w ==2){
+    }else if((k*dt)>=8.0 && n_w ==2){
       writing_to_file(im,jm,id,'c',x,y,x_snp);
       n_w++;
-    }else if((k*dt)>=20.0 && and n_w ==3){
+    }else if((k*dt)>=20.0 && n_w ==3){
       writing_to_file(im,jm,id,'d',x,y,x_snp);
       n_w++;
-    }else if((k*dt)>=40.0 && and n_w ==4){
+    }else if((k*dt)>=40.0 && n_w ==4){
       writing_to_file(im,jm,id,'e',x,y,x_snp);
       n_w++;
-    }else if((k*dt)>=70.0 && and n_w ==5){
+    }else if((k*dt)>=70.0 && n_w ==5){
       writing_to_file(im,jm,id,'f',x,y,x_snp);
       n_w++;
-    }else if((k*dt)>=100.0 && and n_w ==6){
+    }else if((k*dt)>=100.0 && n_w ==6){
       writing_to_file(im,jm,id,'g',x,y,x_snp);
       n_w++;
-    }else if((k*dt)>=200.0 && and n_w ==7){
+    }else if((k*dt)>=200.0 && n_w ==7){
       writing_to_file(im,jm,id,'h',x,y,x_snp);
       n_w++;
     }

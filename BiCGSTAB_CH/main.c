@@ -73,6 +73,7 @@ int main(int argc, char *argv[])
   sn     = (double*)malloc(nrows*sizeof(double));
   k=0;
   n_w = 0;
+  printf("dt : %lf\t s : %lf\n",dt,s_ch);
   while((k*dt)<200.5){
     printf("Outer loop : %d\n",k);
     iteration = 0;
